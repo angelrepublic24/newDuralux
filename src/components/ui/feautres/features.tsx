@@ -1,6 +1,12 @@
 import Image from "next/image";
 import React from "react";
 
+interface Props {
+  title: string;
+  description: string;
+  imgSrc: string
+}
+
 export default function Features() {
   return (
     <>
@@ -62,7 +68,7 @@ export default function Features() {
     </>
   );
 }
-function FeatureCard({ title, description, imgSrc }) {
+function FeatureCard({ title, description, imgSrc }: Props) {
   return (
     <div className="bg-white rounded-3xl shadow-xl text-center flex flex-col items-center w-full relative h-[300px]">
       <div className="bg-amber-500 h-1/4 w-full flex justify-center items-center rounded-t-3xl py-6 px-1">
