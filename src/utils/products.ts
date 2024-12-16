@@ -9,7 +9,10 @@ export const products: Product[] = [
             "https://duraluxcanopies.com/wp-content/uploads/2024/12/03.BOTTOM_BRONZE.gif",
         ],
         "color": [
-            "Default Color"
+            "Black",
+            "Bronze",
+            "Silver",
+            "White"
         ],
         "slug": "modular-canopies",
         "type": "Canopies",
@@ -1874,7 +1877,10 @@ export const products: Product[] = [
             "https://duraluxcanopies.com/wp-content/uploads/2024/12/03.BOTTOM_BRONZE.gif",
         ],
         "color": [
-            "Default Color"
+            "Black",
+            "Bronze",
+            "Silver",
+            "White"
         ],
         "slug": "modular-sunshades",
         "type": "Sunshades",
@@ -3739,7 +3745,10 @@ export const products: Product[] = [
             "https://duraluxcanopies.com/wp-content/uploads/2024/12/03.BOTTOM_BRONZE.gif",
         ],
         "color": [
-            "Default Color"
+            "Black",
+            "Bronze",
+            "Silver",
+            "White"
         ],
         "slug": "modular-pergolas",
         "type": "Pergolas",
