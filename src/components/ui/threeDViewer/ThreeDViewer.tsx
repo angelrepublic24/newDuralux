@@ -24,19 +24,15 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
     const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0xd3d3d3); // Fondo gris claro
+    renderer.setClearColor(0xffffff); // Fondo blanco puro
     container.appendChild(renderer.domElement);
 
     // Iluminación para colores naturales
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Iluminación fuerte y uniforme
     scene.add(ambientLight);
 
-    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6); // Iluminación superior/inferior
     scene.add(hemisphereLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
 
     // Controles interactivos (rotación y zoom)
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -61,12 +57,20 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
       (gltf) => {
         const model = gltf.scene;
 
-        // Ajustar materiales del modelo
+        // Ajustar materiales del modelo de manera segura
         model.traverse((node) => {
-          if (node.isMesh) {
-            const material = node.material as THREE.MeshStandardMaterial;
-            material.metalness = 0; // Sin reflejos metálicos
-            material.roughness = 1; // Superficie mate
+          if (node instanceof THREE.Mesh) {
+            if (Array.isArray(node.material)) {
+              node.material.forEach((material) => {
+                if (material instanceof THREE.MeshStandardMaterial) {
+                  material.metalness = 0; // Sin reflejos metálicos
+                  material.roughness = 0.5; // Superficie ligeramente reflectante
+                }
+              });
+            } else if (node.material instanceof THREE.MeshStandardMaterial) {
+              node.material.metalness = 0;
+              node.material.roughness = 0.5;
+            }
           }
         });
 
@@ -75,7 +79,7 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
         const center = box.getCenter(new THREE.Vector3());
         model.position.sub(center);
 
-        model.scale.set(2, 2, 2);
+        model.scale.set(2, 2, 2); // Escalar modelo
         scene.add(model);
       },
       undefined,
@@ -84,8 +88,9 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
       }
     );
 
-    camera.position.set(0, 2, 4);
+    camera.position.set(0, 2, 5);
 
+    // Animación
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
@@ -93,6 +98,7 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
     };
     animate();
 
+    // Limpieza al desmontar el componente
     return () => {
       renderer.dispose();
       controls.dispose();
@@ -100,7 +106,7 @@ const ThreeDViewer: React.FC<ThreeDViewerProps> = ({ modelPaths, selectedColor }
     };
   }, [selectedColor, modelPaths]);
 
-  return <div ref={mountRef} style={{ width: "100%", height: "500px", background: "#d3d3d3" }} />;
+  return <div ref={mountRef} style={{ width: "100%", height: "500px", background: "#ffffff" }} />;
 };
 
 export default ThreeDViewer;
